@@ -1,4 +1,13 @@
 #!/usr/bin//env python
+'''
+Create a script that writes a line to a file a specified number of times.
+Requirements:
+
+    Scripts read following input args:
+        file name
+        phrase
+        number of repetion phrase
+'''
 import sys 
  
 def generate(file, phrase, count): 
