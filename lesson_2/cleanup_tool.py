@@ -1,8 +1,8 @@
 #!/usr/bin/env python
- 
+'''script cleans up a directory by removing empty subdirectories and files older than a certain date'''
 import os 
 import datetime 
- 
+  
 def remove_empty_folders(root_dir): 
     for root, dirs, files in os.walk(root_dir, topdown=False): 
         for directory in dirs: 
@@ -29,8 +29,8 @@ def remove_files_older_than(root_dir, threshold_date):
                 print(f"Ошибка при удалении файла {file_path}: {e}") 
  
 # Указываем корневой каталог и пороговую дату 
-root_directory = '/path/to/root_directory' 
-threshold_date = datetime.datetime(2023, 1, 1) 
+root_directory = 'home/natali/for_python/git/lesson_2/target' 
+threshold_date = datetime.datetime(2023, 11, 11) 
  
 remove_empty_folders(root_directory) 
 remove_files_older_than(root_directory, threshold_date) 
