@@ -1,0 +1,25 @@
+#!/usr/bin//env python
+'''organizes files in a directory into subdirectories based on file type.'''
+import os 
+import shutil 
+ 
+def org_files(dir): 
+    if not os.path.exists(dir): 
+        print(f"'{dir}' is not exist.") 
+        return 
+ 
+    for file_name in os.listdir(dir): 
+        file_path = os.path.join(dir, file_name) 
+        if os.path.isfile(file_path): 
+            f_exten = file_name.split('.')[-1] 
+            if not os.path.exists(os.path.join(dir, f_exten)): 
+                os.mkdir(os.path.join(dir, f_exten)) 
+            try: 
+                shutil.move(file_path, os.path.join(dir, f_exten, file_name)) 
+            except shutil.Error as e: 
+                print("Error") 
+            except Exception as e: 
+                print("Error") 
+  
+dir_path = '/home/natali/for_python/git/lesson_2/target' 
+org_files(dir_path) 
