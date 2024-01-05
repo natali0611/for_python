@@ -1,0 +1,31 @@
+---
+- name: changing permission in sshd_config
+  hosts: all
+  gather_facts: false
+  become: yes
+  # ignore_errors: true
+  vars:
+    sshd_config_file: /etc/ssh/sshd_config
+    local_user: natali
+
+  tasks:
+  - name: changing configuration file
+    become: yes
+    lineinfile:
+      path: "{{ sshd_config_file }}"
+      regex: "^(#)?{{ item.key }}"
+      line: "{{ item.key }} {{ item.value }}"
+      state: present
+    loop:
+      - { key: "PermitRootLogin", value: "no" }
+      - { key: "PermitEmptyPasswords", value: "yes"}
+      - { key: "PasswordAuthentication", value: "no" } 
+    notify:
+    - restart sshd
+
+  handlers:
+  - name: restart sshd
+    become: yes
+    service:
+      name: sshd
+      state: restarted

@@ -1,0 +1,41 @@
+---
+- name: First server preparation
+  hosts: all
+  gather_facts: false
+  become: no
+  # ignore_errors: true
+  vars:
+    ssh_key_filename: admin_key
+    ssh_key_location_path: /home/natali/ansible
+    local_user: natali
+
+  tasks:
+  - name: generate SHH key "{{ ssh_key_filename }}"
+    user:
+      name: "{{ local_user }}"
+      generate_ssh_key: yes
+      ssh_key_type: rsa
+      ssh_key_bits: 4096
+      ssh_key_file: "{{ ssh_key_location_path }}/{{ ssh_key_filename }}"
+      force: no
+    delegate_to: localhost
+    run_once: yes
+  
+  - name: add key to remote host
+    ansible.builtin.command: ssh-copy-id -i '/home/natali/ansible/admin_key.pub' user1@192.168.100.63
+    delegate_to: localhost
+
+  - name: Disable password ssh connection
+    ansible.builtin.copy:
+      src: /home/natali/ansible/disable_ssh_password.conf
+      dest: /etc/ssh/sshd_config.d/
+      owner: user1
+      group: sudo
+    notify: restart sshd
+
+  handlers:
+  - name: restart sshd
+    become: no
+    service:
+      name: sshd
+      state: restarted
